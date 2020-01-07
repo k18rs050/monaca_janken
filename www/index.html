@@ -118,6 +118,73 @@
         $("#newgame").css("display", "inline");
       }
 
+      function fetchAll() {
+      JankenScore.fetchAll()
+      .then(function(results){
+        var msg="";
+        for(var i=0; i<results.length; i++){
+          msg += results[i].get(key) + "<br>";
+        }
+        $("#display").removeClass();
+        $("#display").addClass("text-light");
+        $("#display").addClass("bg-primary");
+        $("#display").html(msg);
+      })
+      .catch(function(error){
+        $("#display").removeClass();
+        $("#display").addClass("bg-warning");
+        $("#display").html("delete fail:" + JSON.stringify(error));
+      })
+    }
+
+    function deleteData() {
+      JankenScore.fetch()
+      .then(function(uTdata){
+        return uTdata.delete();
+      })
+      .then(function(results){
+        $("#display").removeClass();
+        $("#display").addClass("bg-success");
+        $("#display").html("delete success");
+      })
+      .catch(function(error){
+        $("#display").removeClass();
+        $("#display").addClass("bg-warning");
+        $("#display").html("delete fail:" + JSON.stringify(error));
+      })
+    }
+
+    function countData() {
+      JankenScore.count().fetchAll()
+      .then(function(results){
+        $("#display").removeClass();
+        $("#display").addClass("bg-success");
+        $("#display").html(results.count);
+      })
+      .catch(function(error){
+        $("#display").removeClass();
+        $("#display").addClass("bg-warning");
+        $("#display").html("count fail:" + JSON.stringify(error));
+      })
+    }
+    function sortData() {
+      JankenScore.order(key, true).fetchAll()
+      .then(function(results){
+        var msg=" ";
+        for(var i=0; i<results.length; i++){
+          msg += results[i].get(key) + "<br>";
+        }
+        $("#display").removeClass();
+        $("#display").addClass("rext-light");
+        $("#display").addClass("bg-primary");
+        $("#display").html(msg);
+      })
+      .catch(function(error){
+        $("#display").removeClass();
+        $("#display").assClass("bg-warning");
+        $("#display").html("delete fail:" + JSON.stringify(error));
+      })
+    }
       // ゲーム初期化
       $(function(){
         newgame();
@@ -133,9 +200,18 @@
     <a onclick="pa();" class="btn btn-outline-primary hand" role="button">ぱー</a>
     <a onclick="newgame();" class="btn btn-info text-white" id="newgame" role="button">New Game</a>
   </div>
+  <div>
+    <a onclick="fetchAll()" class="btn btn-outline-secondary" role="buton">Fetch All</a>
+    <a onclick="deleteData()" class="btn btn-outline-primary" role="buton">Delete</a>
+    <a onclick="countData()" class="btn btn-outline-primary" role="button">Count</a>
+    <a onclick="sortData()" class="btn btn-outline-primary" role="button">Sort</a>
+  </div>
   <div id="result" class="text-white bg-secondary">
   </div>
   <div id="result2" class="bg-warning">
+  </div>
+  <div id="display" class="text-light bg-info">
+    Results
   </div>
 </body>
 </html>
